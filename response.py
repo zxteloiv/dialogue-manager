@@ -151,6 +151,7 @@ async def responding(q, uid):
     qa_answer = await _get_qa_answer(q, uid)
 
     text, key, val = qa_answer
+    logger.info(f"Get QA answer succesfully: text={text}, key={key}, val={val}")
     if text is not None:
         await del_user_context(uid, 'poem')
         await del_user_context(uid, 'idiom')
@@ -161,6 +162,7 @@ async def responding(q, uid):
 
     chat_answer = await _get_chat_answer(q, uid)
     text, key, val = chat_answer
+    logger.info(f"Get Chat answer succesfully: text={text}, key={key}, val={val}")
     if text is not None:
         await del_user_context(uid, 'poem')
         await del_user_context(uid, 'idiom')

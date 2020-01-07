@@ -64,6 +64,11 @@ async def get_user_context(uid):
         return hval
 
 async def set_user_context(uid, key, val):
+    if val is None:
+        logger.debug(f"Ignored empty set for redis: key={key}")
+        return
+
+    logger.debug(f"To update redis: key={key}, val={val}")
     r = redis.StrictRedis(**context_redis)
     r.hset(context_prefix + str(uid), key, val)
     r.close()
