@@ -1,15 +1,15 @@
 import httpx
-from config import downstreams, context_redis, context_prefix
+from config import downstreams, context_redis, context_prefix, max_timeout
 import redis
 from sanic.log import logger
 
 async def fetch_idiom_qa(q, uid, idiom=None):
     baseurl = downstreams["idiom_qa"]
-    async with httpx.Client() as c:
+    async with httpx.Client(timeout=max_timeout) as c:
         param = {"q": q, "uid": uid}
         if idiom:
             param["idiom"] = idiom
-        r = await c.get(baseurl, params=param)
+        r = await c.get(baseurl, params=param, timeout=max_timeout)
         r.encoding = "utf-8"
         logger.info("IdiomQA request: {0}".format(r.url))
 
@@ -17,8 +17,8 @@ async def fetch_idiom_qa(q, uid, idiom=None):
 
 async def fetch_idiom_check(q, uid):
     baseurl = downstreams["idiom_check"]
-    async with httpx.Client() as c:
-        r = await c.get(baseurl, params={"q": q})
+    async with httpx.Client(timeout=max_timeout) as c:
+        r = await c.get(baseurl, params={"q": q}, timeout=max_timeout)
         logger.info("IdiomCheck request: {0}".format(r.url))
         return r.json()
 
@@ -27,22 +27,22 @@ async def fetch_poetry_qa(q, uid, contextual_poem=None):
     param = {"q": q}
     if contextual_poem:
         param['context_poem'] = contextual_poem
-    async with httpx.Client() as c:
-        r = await c.get(baseurl, params=param)
+    async with httpx.Client(timeout=max_timeout) as c:
+        r = await c.get(baseurl, params=param, timeout=max_timeout)
         logger.info("PoetryQA request: {0}".format(r.url))
         return r.json()
 
 async def fetch_idiom_chat(q, uid):
     baseurl = downstreams["idiom_chat"]
-    async with httpx.Client() as c:
-        r = await c.get(baseurl, params={"query": q})
+    async with httpx.Client(timeout=max_timeout) as c:
+        r = await c.get(baseurl, params={"query": q}, timeout=max_timeout)
         logger.info("IdiomChat request: {0}".format(r.url))
         return r.json()
 
 async def fetch_poetry_chat(q, uid):
     baseurl = downstreams["poetry_chat"]
-    async with httpx.Client() as c:
-        r = await c.get(baseurl, params={"q": q})
+    async with httpx.Client(timeout=max_timeout) as c:
+        r = await c.get(baseurl, params={"q": q}, timeout=max_timeout)
         logger.info("PoetryChat request: {0}".format(r.url))
         return r.json()
 

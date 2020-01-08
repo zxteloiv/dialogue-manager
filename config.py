@@ -15,3 +15,4 @@ context_redis = {
 }
 
 context_prefix = "d-ctx-"
+max_timeout = 4   # in seconds
